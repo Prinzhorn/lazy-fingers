@@ -50,7 +50,7 @@ var matches = lazy.find('fbr');
 
 ### `highlight(match, fn)`
 
-A helper function to highlight matches (i.e. one of the `matches` returned from `find`). The `fn` function does the actual highlighting on the character it gets as a parameter.
+A helper function to highlight matches (i.e. one of the `matches` returned from `find`). The `fn` function does the actual highlighting on the character it gets as a parameter. Returns a string, which is the transformed `indexAttribute`, where each matched character was passed to `fn`.
 
 ```js
 var match = matches[0];
