@@ -8,7 +8,7 @@ See it in action on http://prinzhorn.github.io/lazy-fingers/
 API
 ---
 
-### `LazyFingers([options])` constructor
+### `LazyFingers([options])`
 
 ```js
 var lazy = LazyFingers();
@@ -22,9 +22,9 @@ Options with defaults:
 }
 ```
 
-### `add(documents)` method
+### `add(documents)`
 
-Adds the array of `documents` to the index.
+Adds the array of `documents` to the index. A document is a simple JavaScript object which needs at least one property, the `indexAttribute`. Since lazy-fingers only stores references, you can pass any object to it.
 
 ```js
 lazy.add([
@@ -33,7 +33,7 @@ lazy.add([
 ]);
 ```
 
-### `find(query)` method
+### `find(query)`
 
 Returns an array of match objects. A match object looks like this
 
@@ -48,7 +48,7 @@ Returns an array of match objects. A match object looks like this
 var matches = lazy.find('fbr');
 ```
 
-### `highlight(match, fn)` method
+### `highlight(match, fn)`
 
 A helper function to highlight matches (i.e. one of the `matches` returned from `find`). The `fn` function does the actual highlighting on the character it gets as a parameter.
 
