@@ -70,6 +70,12 @@
 			border-bottom:none;
 		}
 
+		.search-results a {
+			color:inherit;
+			text-decoration:none;
+			display:block;
+		}
+
 		.search-results .highlight {
 			font-weight:bold;
 			color:#000;
@@ -104,6 +110,7 @@
 		var resultsIndex = 0;
 		var resultsLength;
 		var result;
+		var path;
 		var list = '';
 
 		//Sort the results by the first match position (early match = on top).
@@ -116,11 +123,13 @@
 		for(; resultsIndex < resultsLength; resultsIndex++) {
 			result = results[resultsIndex];
 
+			path = result.doc.path;
+
 			result = LazyFingers.wrap(result.doc.name, result.positions, function(c) {
 				return '<span class="highlight">' + c + '</span>';
 			});
 
-			list += '<li>' + result + '</li>';
+			list += '<li><a href="https://github.com/joyent/node/tree/master/' + path + '" target="_blank">' + result + '</li>';
 		}
 
 		out.innerHTML = list;
