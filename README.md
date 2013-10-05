@@ -5,7 +5,7 @@ Client side text search for lazy people. Similar to Sublime Text's fuzzy search.
 
 See it in action on http://prinzhorn.github.io/lazy-fingers/
 
-For those of you who don't know Sublime Text: Searching for `wscs` will for example match `super-awesome-bacon.js`
+For those of you who don't know Sublime Text: Searching for `wscs` will for example match `super-awesome-bacon.js`, because the letters w, s, c and s appear inside the filename in this order.
 
 API
 ---
