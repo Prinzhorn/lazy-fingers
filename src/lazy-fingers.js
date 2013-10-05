@@ -51,9 +51,10 @@
 			return [];
 		}
 
-		input = escapeRegExp(input);
+		input = input.split('');
+		input = escapeRegExpEach(input);
 
-		var rx = new RegExp('(' + input.split('').join(').*(') + ')');
+		var rx = new RegExp('(' + input.join(').*(') + ')');
 		var results = [];
 		var index = this._index;
 		var indexIndex = 0;
@@ -126,5 +127,18 @@
 
 	var escapeRegExp = function(text) {
 		return text.replace(/[-[\]{}()*+?.,\\^$|#\s]/g, '\\$&');
+	};
+
+	//If IE 8 were dead, this would be obsolete (e.g. list.map(escapeRegExp))
+	var escapeRegExpEach = function(list) {
+		var listIndex = 0;
+		var listLength = list.length;
+		var result = [];
+
+		for(; listIndex < listLength; listIndex++) {
+			result.push(escapeRegExp(list[listIndex]));
+		}
+
+		return result;
 	};
 }(window));
