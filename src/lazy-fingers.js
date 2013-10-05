@@ -101,7 +101,7 @@
 		return results;
 	};
 
-	LazyFingers.wrap = function(input, positions, fn) {
+	LazyFingers.highlight = function(input, positions, fn) {
 		var offset = 0;
 		var replacementString;
 		var positionsIndex = 0;
