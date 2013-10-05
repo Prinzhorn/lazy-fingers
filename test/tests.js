@@ -1,6 +1,4 @@
-var lazy = new LazyFingers({
-	idAttributes: 'name'
-});
+var lazy = new LazyFingers();
 
 var docs = [
 	{name: 'Abc'},

@@ -1,0 +1,135 @@
+<!DOCTYPE html>
+<html>
+<head>
+	<meta charset="utf-8">
+
+	<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
+
+	<title>Lazy Fingers - Search for people who are too lazy to type.</title>
+
+	<style type="text/css">
+		* {
+			margin:0;
+			padding:0;
+			font-family:sans-serif;
+		}
+
+		.info-box {
+			margin:2em auto;
+			width:90%;
+			max-width:960px;
+		}
+
+		.search-box {
+			width:20em;
+			max-width:90%;
+			margin:2em auto;
+			font-size:150%;
+			padding:0.25em;
+
+			border:1px solid #ddd;
+			background:#f6f6f6;
+		}
+
+		.search-input {
+			width:100%;
+			font-size:inherit;
+			border:1px solid #999;
+			padding:2px;
+			outline:none;
+
+			-moz-box-sizing:border-box;
+			-webkit-box-sizing:border-box;
+			box-sizing:border-box;
+		}
+
+		.search-input:focus {
+			border-color:#09f;
+		}
+
+		.search-results {
+			list-style:none;
+			margin-top:0.25em;
+		}
+
+		.search-results:empty {
+			display:none;
+		}
+
+		.search-results > li {
+			color:#444;
+			border-top:1px solid #fff;
+			border-bottom:1px solid #ccc;
+		}
+
+		.search-results > li:first-child {
+			border-top:none;
+		}
+
+		.search-results > li:last-child {
+			border-bottom:none;
+		}
+
+		.search-results .highlight {
+			font-weight:bold;
+			color:#000;
+		}
+	</style>
+</head>
+
+<body>
+	<a href="https://github.com/Prinzhorn/lazy-fingers"><img style="position: absolute; top: 0; right: 0; border: 0;" src="https://s3.amazonaws.com/github/ribbons/forkme_right_darkblue_121621.png" alt="Fork me on GitHub"></a>
+
+	<div class="info-box">
+		This is a demo of the <a href="https://github.com/Prinzhorn/lazy-fingers">lazy-fingers</a> library. Use the text input to search for files in the joyent/node repo (from 2013-10-05). You can easily use lazy-fingers on lists of thousands of documents (> 9000 in case of the node repo).
+	</div>
+
+	<div class="search-box">
+		<input class="search-input" type="search" placeholder="Search for files (e.g. 'aaa.js')" autofocus />
+		<ol class="search-results"></ol>
+	</div>
+
+	<script type="text/javascript" src="src/lazy-fingers.js"></script>
+	<script type="text/javascript" src="sample-data.js"></script>
+
+	<script type="text/javascript">
+	var lazy = new LazyFingers();
+
+	lazy.add(window.SampleData);
+
+	var out = document.querySelector('.search-results');
+
+	var find = function(val) {
+		var results = lazy.find(val);
+		var resultsIndex = 0;
+		var resultsLength;
+		var result;
+		var list = '';
+
+		//Sort the results by the first match position (early match = on top).
+		results = results.sort(function(a, b) {
+			return a.positions[0] - b.positions[0];
+		}).slice(0, 25);
+
+		resultsLength = results.length;
+
+		for(; resultsIndex < resultsLength; resultsIndex++) {
+			result = results[resultsIndex];
+
+			result = LazyFingers.wrap(result.doc.name, result.positions, function(c) {
+				return '<span class="highlight">' + c + '</span>';
+			});
+
+			list += '<li>' + result + '</li>';
+		}
+
+		out.innerHTML = list;
+	};
+
+	document.querySelector('.search-input').addEventListener('input', function() {
+		find(this.value);
+	}, false);
+	</script>
+</body>
+
+</html>
