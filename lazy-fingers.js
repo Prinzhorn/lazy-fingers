@@ -35,7 +35,7 @@
 				continue;
 			}
 
-			docData = ('' + docData);
+			docData = ('' + docData).toLowerCase();
 
 			index.push({
 				data: docData,
@@ -44,11 +44,18 @@
 		}
 	};
 
-	LazyFingers.fn.find = function(input) {
-		input = input.replace(/\s+/g, '');
+	LazyFingers.fn.find = function(input, options) {
+		input = input.replace(/\s+/g, '').toLowerCase();
+
+		if(!input.length) {
+			return [];
+		}
+
 		input = escapeRegExp(input);
 
-		var rx = new RegExp('(' + input.split('').join(').*(') + ')', 'i');
+		options = options || {};
+
+		var rx = new RegExp('(' + input.split('').join(').*(') + ')');
 		var results = [];
 		var index = this._index;
 		var indexIndex = 0;
@@ -59,6 +66,9 @@
 		var matchedPositions;
 		var argumentsIndex;
 		var argumentsLength;
+		var character;
+		var characterIndex ;
+		var limit = options.limit;
 
 		for(; indexIndex < indexLength; indexIndex++) {
 			indexEntry = index[indexIndex];
@@ -75,8 +85,13 @@
 				//-3 because we only want the group, not the full string or the index.
 				argumentsLength = arguments.length - 2;
 
+				characterIndex = 0;
+
 				for(; argumentsIndex < argumentsLength; argumentsIndex++) {
-					matchedPositions.push(indexEntryData.indexOf(arguments[argumentsIndex]));
+					character = arguments[argumentsIndex];
+					characterIndex = indexEntryData.indexOf(character, characterIndex);
+					matchedPositions.push(characterIndex);
+					characterIndex++;
 				}
 			});
 
@@ -85,10 +100,35 @@
 					doc: indexEntry.doc,
 					positions: matchedPositions
 				});
+
+				if(limit && results.length >= limit) {
+					break;
+				}
 			}
 		}
 
 		return results;
+	};
+
+	LazyFingers.wrap = function(input, positions, fn) {
+		var inputIndex = 0;
+		var inputLength = input.length;
+		var offset = 0;
+		var replacementString;
+		var positionsIndex = 0;
+		var positionsLength = positions.length;
+		var index;
+
+		for(; positionsIndex < positionsLength; positionsIndex++) {
+			index = positions[positionsIndex] + offset;
+			replacementString = fn(input.charAt(index));
+
+			input = input.slice(0, index) + replacementString + input.slice(index + 1);
+
+			offset += replacementString.length - 1;
+		}
+
+		return input;
 	};
 
 	var escapeRegExp = function(text) {
