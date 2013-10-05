@@ -125,7 +125,7 @@
 
 			path = result.doc.path;
 
-			result = LazyFingers.wrap(result.doc.name, result.positions, function(c) {
+			result = lazy.highlight(result, function(c) {
 				return '<span class="highlight">' + c + '</span>';
 			});
 

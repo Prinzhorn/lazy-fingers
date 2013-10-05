@@ -101,7 +101,9 @@
 		return results;
 	};
 
-	LazyFingers.highlight = function(input, positions, fn) {
+	LazyFingers.fn.highlight = function(match, fn) {
+		var positions = match.positions;
+		var input = match.doc[this.options.indexAttribute];
 		var offset = 0;
 		var replacementString;
 		var positionsIndex = 0;
