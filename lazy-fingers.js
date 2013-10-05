@@ -7,24 +7,21 @@
 			indexAttribute: options.indexAttribute || 'name'
 		};
 
-		this._index = {};
+		this._index = [];
 		this._documentsById = {};
 	};
 
 	LazyFingers.fn = LazyFingers.prototype;
 
-	LazyFingers.fn.index = function(docs) {
+	LazyFingers.fn.add = function(docs) {
 		var docsIndex = 0;
 		var docsLength = docs.length;
 		var indexAttribute = this.options.indexAttribute;
 		var idAttribute = this.options.idAttribute;
 		var doc;
 		var docData;
-		var index;
 		var docsById = this._documentsById;
-		var docDataIndex;
-		var docDataLength;
-		var docDataCharacter;
+		var index = this._index;
 
 		//Iterate over all documents we want to add to the index.
 		for(; docsIndex < docsLength; docsIndex++) {
@@ -38,45 +35,63 @@
 				continue;
 			}
 
-			docData = ('' + docData).toLowerCase().replace(/\s+/, '').split('');
+			docData = ('' + docData);
 
-			index = this._index;
-			docDataIndex = 0;
-			docDataLength = docData.length;
-
-			//Iterate over all characters inside this document's data field.
-			for(; docDataIndex < docDataLength; docDataIndex++) {
-				docDataCharacter = docData[docDataIndex];
-
-				index = index[docDataCharacter] = index[docDataCharacter] || {};
-				index._d = index._d || [];
-
-				//Add a reference to the current document to the index at this position.
-				index._d.push(doc);
-			}
+			index.push({
+				data: docData,
+				doc: doc
+			});
 		}
 	};
 
 	LazyFingers.fn.find = function(input) {
-		input = input.toLowerCase().split('');
+		input = input.replace(/\s+/g, '');
+		input = escapeRegExp(input);
 
+		var rx = new RegExp('(' + input.split('').join(').*(') + ')', 'i');
 		var results = [];
-		var data = this._indexData;
+		var index = this._index;
 		var indexIndex = 0;
-		var indexLength = data.length;
+		var indexLength = index.length;
 		var indexEntry;
-		var inputIndex = 0;
-		var inputLength = input.length;
-		var inputCharacter;
+		var indexEntryData;
+		var isMatch;
+		var matchedPositions;
+		var argumentsIndex;
+		var argumentsLength;
 
 		for(; indexIndex < indexLength; indexIndex++) {
-			indexEntry = data[indexIndex];
+			indexEntry = index[indexIndex];
+			indexEntryData = indexEntry.data;
 
-			for(; inputIndex < inputLength; inputIndex++) {
-				inputCharacter = input[inputIndex];
+			isMatch = false;
+
+			indexEntryData.replace(rx, function() {
+				isMatch = true;
+
+				matchedPositions = [];
+
+				argumentsIndex = 1;
+				//-3 because we only want the group, not the full string or the index.
+				argumentsLength = arguments.length - 2;
+
+				for(; argumentsIndex < argumentsLength; argumentsIndex++) {
+					matchedPositions.push(indexEntryData.indexOf(arguments[argumentsIndex]));
+				}
+			});
+
+			if(isMatch) {
+				results.push({
+					doc: indexEntry.doc,
+					positions: matchedPositions
+				});
 			}
 		}
 
 		return results;
+	};
+
+	var escapeRegExp = function(text) {
+		return text.replace(/[-[\]{}()*+?.,\\^$|#\s]/g, '\\$&');
 	};
 }(window));
