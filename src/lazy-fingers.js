@@ -1,9 +1,10 @@
 (function(window, undefined) {
+	'use strict';
+
 	var LazyFingers = window.LazyFingers = function(options) {
 		options = options || {};
 
 		this.options = {
-			idAttribute: options.idAttribute || 'id',
 			indexAttribute: options.indexAttribute || 'name'
 		};
 
@@ -17,18 +18,14 @@
 		var docsIndex = 0;
 		var docsLength = docs.length;
 		var indexAttribute = this.options.indexAttribute;
-		var idAttribute = this.options.idAttribute;
 		var doc;
 		var docData;
-		var docsById = this._documentsById;
 		var index = this._index;
 
 		//Iterate over all documents we want to add to the index.
 		for(; docsIndex < docsLength; docsIndex++) {
 			doc = docs[docsIndex];
 			docData = doc[indexAttribute];
-
-			docsById[doc[idAttribute]] = doc;
 
 			//Does the document have any data to index?
 			if(docData === undefined || docData === null) {
@@ -80,7 +77,7 @@
 				matchedPositions = [];
 
 				argumentsIndex = 1;
-				//-3 because we only want the group, not the full string or the index.
+				//-2 because we only want the group, not the full string or the index.
 				argumentsLength = arguments.length - 2;
 
 				characterIndex = 0;
@@ -105,8 +102,6 @@
 	};
 
 	LazyFingers.wrap = function(input, positions, fn) {
-		var inputIndex = 0;
-		var inputLength = input.length;
 		var offset = 0;
 		var replacementString;
 		var positionsIndex = 0;
