@@ -44,7 +44,7 @@
 		}
 	};
 
-	LazyFingers.fn.find = function(input, options) {
+	LazyFingers.fn.find = function(input) {
 		input = input.replace(/\s+/g, '').toLowerCase();
 
 		if(!input.length) {
@@ -52,8 +52,6 @@
 		}
 
 		input = escapeRegExp(input);
-
-		options = options || {};
 
 		var rx = new RegExp('(' + input.split('').join(').*(') + ')');
 		var results = [];
@@ -68,7 +66,6 @@
 		var argumentsLength;
 		var character;
 		var characterIndex ;
-		var limit = options.limit;
 
 		for(; indexIndex < indexLength; indexIndex++) {
 			indexEntry = index[indexIndex];
@@ -100,10 +97,6 @@
 					doc: indexEntry.doc,
 					positions: matchedPositions
 				});
-
-				if(limit && results.length >= limit) {
-					break;
-				}
 			}
 		}
 
