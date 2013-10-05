@@ -1,0 +1,39 @@
+{
+  "name": "lazy-fingers",
+  "description": "Client side text search for lazy people. Similar to Sublime Text's fuzzy search.",
+  "version": "0.0.1",
+  "homepage": "https://github.com/Prinzhorn/lazy-fingers",
+  "author": {
+    "name": "Alexander Prinzhorn",
+    "email": "alexander@prinzhorn.it",
+    "url": "http://www.prinzhorn.it/"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git://github.com/Prinzhorn/lazy-fingers.git"
+  },
+  "bugs": {
+    "url": "https://github.com/Prinzhorn/lazy-fingers/issues"
+  },
+  "licenses": [
+    {
+      "type": "MIT",
+      "url": "https://github.com/Prinzhorn/lazy-fingers/blob/master/LICENSE.txt"
+    }
+  ],
+  "main": "dist/lazy-fingers.min.js",
+  "engines": {
+    "node": ">=0.8"
+  },
+  "scripts": {
+    "test": "grunt travis --verbose"
+  },
+  "devDependencies": {
+    "grunt-cli": "~0.1.7",
+    "grunt": "~0.4.1",
+    "grunt-contrib-uglify": "~0.2.0",
+    "grunt-contrib-jshint": "~0.3.0",
+    "grunt-contrib-qunit": "~0.2.0"
+  },
+  "keywords": ["fuzzy search"]
+}
